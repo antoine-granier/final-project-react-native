@@ -1,21 +1,26 @@
 import axios from "axios"
 import { useEffect, useState } from "react"
 import { Button, Text, TextInput, ToastAndroid, View } from "react-native"
+import { useDispatch } from 'react-redux'
+import { setInfo } from "../connexionInfoSlice"
 
-function Home({navigation, route}) {
+function Home({ navigation, route }) {
 
     const [ip, setIp] = useState("")
     const [port, setPort] = useState(0)
+
+    const dispatch = useDispatch();
 
     const initialiseConnexion = () => {
         if (ip !== "" && port !== 0) {
             console.log(`http://${ip}:${port}`)
             axios.get(`http://${ip}:${port}`).then(res => {
                 console.log(res.data)
-                ToastAndroid.show(res.data, ToastAndroid.SHORT)
+                // ToastAndroid.show(res.data, ToastAndroid.SHORT)
+                dispatch(setInfo({ ip: ip, port: port }))
                 navigation.navigate("Record")
             }).catch(err => {
-                ToastAndroid.show("Connexion failed !", ToastAndroid.SHORT)
+                // ToastAndroid.show("Connexion failed !", ToastAndroid.SHORT)
             })
         }
     }
